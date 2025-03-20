@@ -100,7 +100,7 @@ const ContactForm = () => {
     e.preventDefault();
     try {
       // Send form data to backend API
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}/contact`,formData, {
+      const response = await axios.post(`${import.meta.env.VITE_API}/contact`,formData, {
         withCredentials: true,
       });
 
