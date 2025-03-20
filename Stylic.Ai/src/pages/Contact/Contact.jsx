@@ -1,12 +1,19 @@
-import React, { useState } from "react";
-import { ChevronRight } from "lucide-react";
+// Import Required Libraries
+import axios from "axios";
 import { motion } from "framer-motion";
+import { ChevronRight } from "lucide-react";
+import React, { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
+
+// Animation for fade-in effects
 const fadeIn = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.8 } },
 };
 
+// Contact Page Header Component
 const ContactHeader = () => {
   return (
     <motion.div
@@ -25,6 +32,7 @@ const ContactHeader = () => {
   );
 };
 
+// Contact Details Section (Address & Phone Info)
 const ContactDetails = () => {
   return (
     <motion.section
@@ -71,6 +79,7 @@ const ContactDetails = () => {
   );
 };
 
+// Contact Form Component
 const ContactForm = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -79,13 +88,36 @@ const ContactForm = () => {
     message: "",
   });
 
+  // Handle input change
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  // Handle form submission
+  // console.log(process.env.REACT_APP_API_URL);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form Submitted:", formData);
+    try {
+      // Send form data to backend API
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/contact`,formData, {
+        withCredentials: true,
+      });
+
+      console.log(response.data);
+      toast.success('Form Submitted Successfully', { autoClose: 2000, position: "bottom-left" });
+
+      // Clear form after submission
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        message: "",
+      });
+    } catch (error) {
+      console.error("Error Submitting Form:", error);
+      toast.error('Failed to submit the form', { position: "bottom-left" });
+    }
   };
 
   return (
@@ -100,108 +132,43 @@ const ContactForm = () => {
         <form onSubmit={handleSubmit} className="bg-white">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Name Field */}
-            <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-            >
-              <label className="block text-gray-700 font-medium mb-1">
-                Your Name <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="text"
-                name="name"
-                placeholder="Your name here"
-                value={formData.name}
-                onChange={handleChange}
-                required
-                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-              />
+            <motion.div initial={{ opacity: 0, x: -50 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }}>
+              <label className="block text-gray-700 font-medium mb-1">Your Name <span className="text-red-500">*</span></label>
+              <input type="text" name="name" placeholder="Your name here" value={formData.name} onChange={handleChange} required className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" />
             </motion.div>
 
             {/* Email Field */}
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-            >
-              <label className="block text-gray-700 font-medium mb-1">
-                Your Email <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="email"
-                name="email"
-                placeholder="Your email here"
-                value={formData.email}
-                onChange={handleChange}
-                required
-                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-              />
+            <motion.div initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }}>
+              <label className="block text-gray-700 font-medium mb-1">Your Email <span className="text-red-500">*</span></label>
+              <input type="email" name="email" placeholder="Your email here" value={formData.email} onChange={handleChange} required className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" />
             </motion.div>
           </div>
 
-          {/* Contact Number Field */}
-          <motion.div
-            className="mt-6"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <label className="block text-gray-700 font-medium mb-1">
-              Contact Number <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="tel"
-              name="phone"
-              placeholder="Your phone here"
-              value={formData.phone}
-              onChange={handleChange}
-              required
-              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-            />
+          {/* Phone Field */}
+          <motion.div className="mt-6" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
+            <label className="block text-gray-700 font-medium mb-1">Contact Number <span className="text-red-500">*</span></label>
+            <input type="tel" name="phone" placeholder="Your phone here" value={formData.phone} onChange={handleChange} required className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" />
           </motion.div>
 
           {/* Message Field */}
-          <motion.div
-            className="mt-6"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <label className="block text-gray-700 font-medium mb-1">
-              Message <span className="text-red-500">*</span>
-            </label>
-            <textarea
-              name="message"
-              rows="4"
-              placeholder="Tell us a few words"
-              value={formData.message}
-              onChange={handleChange}
-              required
-              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-            ></textarea>
+          <motion.div className="mt-6" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
+            <label className="block text-gray-700 font-medium mb-1">Message <span className="text-red-500">*</span></label>
+            <textarea name="message" rows="4" placeholder="Tell us a few words" value={formData.message} onChange={handleChange} required className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"></textarea>
           </motion.div>
 
           {/* Submit Button */}
-          <motion.div
-            className="mt-6"
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8 }}
-          >
-            <button
-              type="submit"
-              className="bg-yellow-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-yellow-700 transition duration-300"
-            >
-              SUBMIT
-            </button>
+          <motion.div className="mt-6" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8 }}>
+            <button type="submit" className="bg-yellow-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-yellow-700 transition duration-300">SUBMIT</button>
           </motion.div>
         </form>
+        {/* Toast Container for notifications */}
+        <ToastContainer position="top-right" />
       </div>
     </motion.section>
   );
 };
 
+// Combine all components into one Contact page
 const Contact = () => {
   return (
     <div>
