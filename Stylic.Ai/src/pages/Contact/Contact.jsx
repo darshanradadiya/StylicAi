@@ -113,11 +113,19 @@ const ContactForm = () => {
   };
 
   // Handle form submission
+<<<<<<< HEAD
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
 
+=======
+  
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!validateForm()) return;
+  
+>>>>>>> 34f7efd737342f80fa4809bdbcc94dde4786e40b
     setIsLoading(true);
     try {
       const response = await submitContactForm(formData);
