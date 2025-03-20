@@ -1,3 +1,4 @@
+import { submitContactForm } from "../../utils/api";
 // Import Required Libraries
 import axios from "axios";
 import { motion } from "framer-motion";
@@ -5,7 +6,6 @@ import { ChevronRight } from "lucide-react";
 import React, { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 
 // Animation for fade-in effects
 const fadeIn = {
@@ -87,39 +87,49 @@ const ContactForm = () => {
     phone: "",
     message: "",
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   // Handle input change
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  // Validate form inputs
+  const validateForm = () => {
+    if (!formData.name || !formData.email || !formData.phone || !formData.message) {
+      toast.error("All fields are required", { position: "bottom-left" });
+      return false;
+    }
+    if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
+      toast.error("Invalid email address", { position: "bottom-left" });
+      return false;
+    }
+    if (!/^\d{10}$/.test(formData.phone)) {
+      toast.error("Phone number must be 10 digits", { position: "bottom-left" });
+      return false;
+    }
+    return true;
   };
 
   // Handle form submission
-  // console.log(process.env.REACT_APP_API_URL);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateForm()) return;
+
+    setIsLoading(true);
     try {
-      // Send form data to backend API
-      const response = await axios.post(`${import.meta.env.VITE_API}/contact`,formData, {
-        withCredentials: true,
-      });
-
-      console.log(response.data);
-      toast.success('Form Submitted Successfully', { autoClose: 2000, position: "bottom-left" });
-
-      // Clear form after submission
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        message: "",
-      });
+      const response = await submitContactForm(formData);
+      toast.success("Form Submitted Successfully", { autoClose: 2000, position: "bottom-left" });
+      setFormData({ name: "", email: "", phone: "", message: "" });
     } catch (error) {
       console.error("Error Submitting Form:", error);
-      toast.error('Failed to submit the form', { position: "bottom-left" });
+      toast.error("Failed to submit the form", { position: "bottom-left" });
+    } finally {
+      setIsLoading(false);
     }
   };
-
   return (
     <motion.section
       className="bg-white py-10"
@@ -158,7 +168,9 @@ const ContactForm = () => {
 
           {/* Submit Button */}
           <motion.div className="mt-6" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8 }}>
-            <button type="submit" className="bg-yellow-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-yellow-700 transition duration-300">SUBMIT</button>
+            <button type="submit" className="bg-yellow-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-yellow-700 transition duration-300" disabled={isLoading}>
+              {isLoading ? "Submitting..." : "SUBMIT"}
+            </button>
           </motion.div>
         </form>
         {/* Toast Container for notifications */}
