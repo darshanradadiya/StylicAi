@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import express from "express";
 import contactRoutes from "./Router/Contact.Router.js";
 import registerRoutes from "./Router/Register.Admin.Router.js";
+import userRoutes from "./Router/User.Router.js";
 import connectDB from "./utils/db.js";
 
 dotenv.config();
@@ -16,7 +17,7 @@ const app = express();
 // Enable CORS
 app.use(
   cors({
-    origin: ["http://localhost:5173", "http://192.168.1.26:5173"], // Front-end URL
+    origin: ["http://localhost:5173", "http://192.168.1.22:5173"], // Front-end URL
     credentials: true,
   })
 );
@@ -27,6 +28,7 @@ app.use(bodyParser.json());
 // Use the contact routes
 app.use("/api", contactRoutes);
 app.use('/api', registerRoutes);
+app.use('/api', userRoutes);
 
 const PORT = process.env.PORT || 5000;
 // const HOST = process.env.HOST || "localhost";w

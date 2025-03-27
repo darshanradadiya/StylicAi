@@ -55,3 +55,15 @@ export const CreateContact = async (req, res) => {
     } 
 }
 
+export const Getcontact = async(req , res ) => {
+    try {
+        const contacts = await Contact.find();
+        res.json({
+            message: 'All contacts',
+            success: true,
+            data: contacts
+        });
+    } catch (error) {
+        console.log(error);
+    }
+}

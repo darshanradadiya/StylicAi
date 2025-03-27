@@ -10,7 +10,7 @@ import {
   Legend,
 } from "chart.js";
 
-// Register required chart.js componentsa
+// Register required chart.js components
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -57,8 +57,12 @@ const options = {
 export default function AnalyticsDashboard() {
   return (
     <div className="p-4">
-      <h2 className="text-2xl font-bold mb-4">Analytics Dashboard</h2>
-      <Line data={data} options={options} />
+      <h2 className="text-2xl font-bold mb-4 text-center md:text-left">
+        Analytics Dashboard
+      </h2>
+      <div className="overflow-x-auto">
+        <Line data={data} options={options} />
+      </div>
     </div>
   );
 }
