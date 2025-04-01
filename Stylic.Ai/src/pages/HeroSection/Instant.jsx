@@ -22,6 +22,7 @@ const Second = () => {
               title: "Upload Your Garment",
               description:
                 "Upload your attire's front and back pictures for effective AI visualization.",
+              
             },
             {
               img: "./src/assets/instant/ai.png",

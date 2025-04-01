@@ -14,7 +14,7 @@ const TABS = [
   "Analytics",
   "E-commerce",
 ];
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = import.meta.env.VITE_API_URL; // Ensure .env file contains VITE_API_URL
 
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("Users");
@@ -47,6 +47,7 @@ export default function AdminDashboard() {
       console.error("Error fetching contacts", error);
     }
   };
+
   const handleLogout = () => {
     logout(navigate);
   };

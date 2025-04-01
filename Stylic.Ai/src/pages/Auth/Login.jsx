@@ -5,30 +5,14 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function LoginPage() {
-  const [captcha, setCaptcha] = useState(generateCaptcha());
-  const [inputCaptcha, setInputCaptcha] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
-  function generateCaptcha() {
-    return Math.random().toString(36).substring(2, 8).toUpperCase();
-  }
-
-  function refreshCaptcha() {
-    setCaptcha(generateCaptcha());
-  }
-
   async function handleSubmit(e) {
     e.preventDefault();
-
-    if (inputCaptcha !== captcha) {
-      toast.error("Invalid CAPTCHA. Try again.");
-      return;
-    }
-
     setLoading(true);
 
     try {
@@ -81,30 +65,6 @@ export default function LoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-            />
-          </div>
-
-          <div className="mt-4">
-            <label className="block text-gray-700">Verify you're human</label>
-            <div className="flex items-center justify-between border p-2 rounded-lg bg-gray-100">
-              <span className="text-xl font-mono tracking-widest text-gray-800">
-                {captcha}
-              </span>
-              <button
-                type="button"
-                onClick={refreshCaptcha}
-                className="text-blue-600 text-sm"
-              >
-                🔄 Refresh
-              </button>
-            </div>
-            <input
-              type="text"
-              placeholder="Enter the captcha"
-              className="w-full px-4 py-2 mt-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-              value={inputCaptcha}
-              onChange={(e) => setInputCaptcha(e.target.value)}
-              // required
             />
           </div>
 

@@ -7,6 +7,7 @@ import Login from "./pages/Auth/Login";
 import Contact from "./pages/Contact/Contact";
 import Home from "./pages/HeroSection/Home";
 import Showcase from "./pages/Showcase/Showcase";
+import FileUpload from "./FileUpload";
 
 const PrivateRoute = ({ children }) => {
   const token = localStorage.getItem("token"); // Check if user is logged in
@@ -17,6 +18,7 @@ function App() {
   return (
     <Router>
       <AppContent />
+      {/* <FileUpload /> */}
     </Router>
   );
 }
