@@ -7,7 +7,7 @@ const api = axios.create({
 
 export const submitContactForm = async (formData) => {
   try {
-    const response = await api.post("/contact", formData);
+    const response = await api.post(`${import.meta.env.VITE_API_URL}/contact`, formData);
     return response.data;
   } catch (error) {
     console.error("Error Submitting Form:", error);

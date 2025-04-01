@@ -42,7 +42,7 @@ export default function AdminDashboard() {
   const fetchContacts = async () => {
     try {
       const response = await axios.get(`${API_URL}/contacts`);
-      setContacts(response.data);
+      setContacts(response.data.data); // Accessing `data` from the response
     } catch (error) {
       console.error("Error fetching contacts", error);
     }

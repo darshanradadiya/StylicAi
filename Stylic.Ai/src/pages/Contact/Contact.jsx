@@ -1,6 +1,5 @@
 import { submitContactForm } from "../../utils/api";
 // Import Required Libraries
-import axios from "axios";
 import { motion } from "framer-motion";
 import { ChevronRight } from "lucide-react";
 import React, { useState } from "react";
@@ -50,7 +49,7 @@ const ContactDetails = () => {
             transition={{ duration: 0.8 }}
           >
             <img
-              src="./src/assets/contactform.jpg"
+              src="/assets/contactform.jpg" // Ensure the image is in the public folder
               alt="Contact"
               className="rounded-lg"
             />
@@ -116,7 +115,6 @@ const ContactForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
-  
 
     setIsLoading(true);
     try {
@@ -125,11 +123,16 @@ const ContactForm = () => {
       setFormData({ name: "", email: "", phone: "", message: "" });
     } catch (error) {
       console.error("Error Submitting Form:", error);
-      toast.error("Failed to submit the form", { position: "bottom-left" });
+      if (error.response && error.response.data && error.response.data.message) {
+        toast.error(error.response.data.message, { position: "bottom-left" });
+      } else {
+        toast.error("Failed to submit the form", { position: "bottom-left" });
+      }
     } finally {
       setIsLoading(false);
     }
   };
+
   return (
     <motion.section
       className="bg-white py-10"
